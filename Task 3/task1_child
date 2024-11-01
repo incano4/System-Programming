@@ -1,53 +1,14 @@
 #!/usr/bin/env bash
 
-# отличие сигналов от сокета и пайпа
-# вызвать один скрипт из другого..?
-
-# Из скрипта запускаем дочерний процесс. Бинарем он быть не может. Нужны логи в консоль/файл:
-#   - запущен процесс Y
-#   - родительский процесс Х послал сигнал Y дочернему процессу Z.
-#   - Parent process <pid> sent <SIG> to child process <pid>.
-#   - в логах должен быть ps aux | grep <proc>
-# Посылаемый сигнал - kill, term и тд
-
-# while true; do
-#     echo 123
-# done
+# дочерний процесс
 
 
-
-# function check_proc {
-#     # ps aux | grep -i "^ task1_child"
-#     FLAG=$(ps aux | grep task1_child | awk '{print $11, $12}' | tac)
-#     # echo $FLAG
-#     if [ "$FLAG" == "bash ./task1_child" ]; then 
-#         # echo "ps aux | grep task1_child | awk '{print $11}' | tac"
-#         FLAG=$(ps aux | grep task1_child | tac)
-#         echo $FLAG
-#         else 
-#             echo "No child process"
-#     fi
-#     # | grep 
-# }
 YELLOW='\033[0;93m'
 NC='\033[0m' # No Color
 
-# check_proc
-# echo "Child process start"
-# sleep infinity
 echo "Child process start with PID: $$"
-# check_proc
-# ps aux | grep task1_child | awk '{print $2}' | tac | tail -1
-# echo "ps aux output:"
-# ps aux | grep task1_child | tac | tail -1
+
 echo -e "${YELLOW}$(ps aux | grep task1_child | tac | tail -1)${NC}"
-# echo $(ps aux | grep task1_child | tac | tail -1)
-# export PID=$(ps aux | grep task1_child | awk '{print $2}' | tac | tail -1)
-# export PID=$(ps aux | grep task1_child)
-# echo "Child process PID: $$"
+
 echo "Child process sleeps infinity.."
 sleep infinity
-# echo Killing process..
-# kill -9 $PID
-
-# export ($PID)
