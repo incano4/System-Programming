@@ -9,8 +9,9 @@
 void check_buffer_overflow(const char *file_path) {
     char buffer[BUFFER_SIZE];
     if (strlen(file_path) >= BUFFER_SIZE) {
-        printf("Error: path is too long. Buffer owerflow.\n");
-        exit(1);
+        // printf("Error: path is too long. Buffer owerflow.\n");
+        fprintf(stderr, "Error: path is too long. Buffer owerflow.\n");
+        exit(7);
     }
 
     // Копируем путь в буфер (длина проверена)
@@ -23,7 +24,7 @@ void check_buffer_overflow(const char *file_path) {
 void check_max_length(char const *file_path) {
     if (strlen(file_path) >= NAME_MAX) {
         fprintf(stderr, "Error: name too long\n");
-        exit(1);
+        exit(36);
     }
 }
 
@@ -34,13 +35,16 @@ char path_validation(char const *file_path) {
 
     switch(last_char) {
     case '/':
-        printf("Unable to create file %s. Filename shouldn't ends with '/'\n", file_path);
+        // printf("Unable to create file %s. Filename shouldn't ends with '/'\n", file_path);
+        fprintf(stderr, "Unable to create file %s. Filename shouldn't ends with '/'\n", file_path);
+        exit(21);
         break;
 
     default: // по умолчанию будем запрещать использование спецсимволов
         const char *invalid_chars = "?~*&?[]";
         if (strpbrk(file_path, invalid_chars)) {
-            printf("Invalid characters in path: %s\n", file_path);
+            // printf("Invalid characters in path: %s\n", file_path);
+            fprintf(stderr, "Invalid characters in path: %s\n", file_path);
             exit(1);
         } else {
             create_file(file_path);
@@ -59,8 +63,9 @@ void create_file(char const *file_path) {
         fclose(file);
         printf("File %s created\n", file_path);
     } else {
-        printf("An error occurred while creating a file: %s\n", file_path);
-        exit(1);
+        // printf("An error occurred while creating a file: %s\n", file_path);
+        fprintf(stderr, "An error occurred while creating a file: %s\n", file_path);
+        exit(132);
     }
 }
 
@@ -69,7 +74,9 @@ void delete_file(char const *file_path) {
     if (remove(file_path) == 0) {
         printf("The file was deleted successfully.\n");
     } else {
-        printf("The file was not deleted.\n");
+        // printf("The file was not deleted.\n");
+        fprintf(stderr, "File was not deleted: %s\n", file_path);
+        exit(2);
     }
 }
 
@@ -105,25 +112,30 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
+// / 
     if ((create_flag || delete_flag) && argc == 2) {
-        printf("No files are specified\n");
-        exit(1);
+        // printf("No files are specified\n");
+        fprintf(stderr, "No files are specified\n");
+        return 22;
     } 
     else if (!create_flag && !delete_flag) {
-        printf("Action is not specified. Use '-c' or '-d' option.\n");
-        exit(1);
+        // printf("Action is not specified. Use '-c' or '-d' option.\n");
+        fprintf(stderr, "Action is not specified. Use '-c' or '-d' option.\n");
+        return 1;
     }
 
     if (create_flag && delete_flag) {
-        printf("You can't use 'delete' and 'create' option at same time \n");
-        exit(1);
+        // printf("You can't use 'delete' and 'create' option at same time \n");
+        fprintf(stderr, "You can't use 'delete' and 'create' option at same time \n");
+        return 1;
     }
 
     // optind - первый элемент массива argv
     for (int i = optind; i < argc; i++) {
         check_buffer_overflow(argv[i]);
         char *file_path = malloc(strlen(argv[i]) + 1); // +1 для добавления символа конца строки
+        // попробовать генерить с random
+        // mal 2048*char_size
 
         strcpy(file_path, argv[i]); // сохраняем путь в выделенную память
         check_max_length(file_path);
@@ -138,7 +150,9 @@ int main(int argc, char *argv[]) {
         else if (delete_flag) {
             const char *invalid_chars = "~&?[]";
             if (strpbrk(file_path, invalid_chars)) {
-                printf("Invalid characters in path: %s\n", file_path);
+                // printf("Invalid characters in path: %s\n", file_path);
+                fprintf(stderr, "Invalid characters in path: %s\n", file_path);
+                return 1;
                 free(file_path);
             } else {
                 printf("Removing files.. \n");
