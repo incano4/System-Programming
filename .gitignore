@@ -1,0 +1,9 @@
+python-analog/
+Task/
+Module/
+.vscode/
+Exam/
+Task 7/Socket/strace/
+Task 7/Socket/pcap_files/
+Task 7/Socket/socket_udp_conn_v2.c
+Task 8/

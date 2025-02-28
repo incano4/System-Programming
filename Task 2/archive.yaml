@@ -1,0 +1,8 @@
+target:
+  directory: ../hw1
+  list: 
+    - creating_user2
+
+backup:
+  number: 2
+  directory: dir

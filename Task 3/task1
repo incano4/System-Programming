@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# Из скрипта запускаем дочерний процесс. Нужны логи в консоль/файл:
+#   - запущен процесс Y
+#   - родительский процесс Х послал сигнал Y дочернему процессу Z.
+#   - Parent process <pid> sent <SIG> to child process <pid>.
+#   - в логах должен быть ps aux | grep <proc>
+# Посылаемый сигнал - kill, term и тд
+
+
+
+RED='\033[0;91m'
+NC='\033[0m' # No Color
+
+function check_proc {
+    FLAG=$(ps aux | grep task1_child | awk '{print $11, $12}' | tac | tail -1)
+    if [ "$FLAG" == "bash ./task1_child" ]; then
+
+        # if exist => kill
+        sleep 5
+        echo "Killing child process (PID=$!).."
+        # so rude...
+        kill -9 $CHLD_PID
+        # kill -15 $CHLD_PID
+        
+        # если процесс не найден, отправляем информацию об этом
+        else 
+            echo "No child process:"
+            echo -e "${RED}$(ps aux | grep task1_child)${NC}"
+    fi
+}
+
+
+# проверяем, что нет дочернего процесса
+check_proc
+
+# вызываем дочерний процесс и получаем его pid
+bash ./task1_child & 
+CHLD_PID=$!
+
+# проверяем, что процесс на самом деле появился
+check_proc
+# проверям, что процесса снова нет
+check_proc

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# дочерний процесс
+
+
+YELLOW='\033[0;93m'
+NC='\033[0m' # No Color
+
+echo "Child process start with PID: $$"
+
+echo -e "${YELLOW}$(ps aux | grep task1_child | tac | tail -1)${NC}"
+
+echo "Child process sleeps infinity.."
+sleep infinity
