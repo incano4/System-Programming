@@ -1,0 +1,6 @@
+sudo mknod /dev/crc c 240 0; sudo chmod 777 /dev/crc
+gcc crc_userspace.c -o crc_userspace
+./crc_userspace test
+
+# Check:
+sudo dmesg | tail
